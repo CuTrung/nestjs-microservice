@@ -1,16 +1,12 @@
 {
   "name": "e2e",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
-  "implicitDependencies": [
-    "nestjs-microservice"
-  ],
+  "implicitDependencies": ["nestjs-microservice"],
   "projectType": "application",
   "targets": {
     "e2e": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{e2eProjectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
       "options": {
         "jestConfig": "e2e/jest.config.ts",
         "passWithNoTests": true
