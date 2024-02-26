@@ -7,7 +7,7 @@
     "build": "nx build",
     "test": "nx test",
     "format": "nx format:write",
-    "init-husky": "husky && echo npm run test > .husky/pre-commit && echo npm run format >> .husky/pre-commit && echo npx --no -- commitlint --edit $1 > .husky/commit-msg",
+    "init-husky": "husky && type husky-prepare\\pre-commit > .husky/pre-commit && type husky-prepare\\commit-msg > .husky/commit-msg",
     "postinstall": "(if exist .husky rmdir /s /q .husky) && npm run init-husky"
   },
   "private": true,
