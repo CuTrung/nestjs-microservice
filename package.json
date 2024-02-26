@@ -7,9 +7,8 @@
     "build": "nx build",
     "test": "nx test",
     "format": "nx format:write",
-    "init-husky": "husky init && echo npm run test > .husky/pre-commit && echo npm run format > .husky/pre-push && echo npx --no -- commitlint --edit $1 > .husky/commit-msg",
-    "postinstall": "(if exist .husky rmdir /s /q .husky) && npm run init-husky",
-    "prepare": "husky"
+    "init-husky": "husky && echo npm run test > .husky/pre-commit && echo npm run format >> .husky/pre-commit && echo npx --no -- commitlint --edit $1 > .husky/commit-msg",
+    "postinstall": "(if exist .husky rmdir /s /q .husky) && npm run init-husky"
   },
   "private": true,
   "dependencies": {
