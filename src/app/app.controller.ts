@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
-
 import { AppService } from './app.service';
+import { Cookies } from 'src/common/decorator/cookies.decorator';
 
 @Controller()
 export class AppController {
@@ -8,6 +8,11 @@ export class AppController {
 
   @Get()
   getData() {
+    return this.appService.getData();
+  }
+
+  @Get()
+  saveData(@Cookies() cookies: any) {
     return this.appService.getData();
   }
 }
