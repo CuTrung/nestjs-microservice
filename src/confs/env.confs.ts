@@ -2,7 +2,7 @@ import * as Joi from 'joi';
 
 export const validationSchema = Joi.object({
   NODE_ENV: Joi.string()
-    .valid('development', 'production', 'test', 'provision')
+    .valid('development', 'production', 'test', 'staging')
     .default('development'),
   PORT: Joi.number().default(3000),
 });
@@ -26,6 +26,7 @@ export const getEnvs = () => {
       url: `${base_url}:${port}${server_prefix}`,
       white_list: _getEnvValue('WHITE_LIST').toString().split(', '),
       version_latest: _getEnvValue('API_VERSION'),
+      node_env: _getEnvValue('NODE_ENV'),
     },
   };
 };

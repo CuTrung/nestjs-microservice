@@ -44,3 +44,4 @@ Thumbs.db
 *.env.*
 *.rest
 *.rest.
+logs/

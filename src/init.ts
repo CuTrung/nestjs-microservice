@@ -17,6 +17,5 @@ export const initApp = async (
   app.enableCors({
     origin: white_list,
   });
-
   return app;
 };
