@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -7,6 +7,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { UtilsModule } from 'src/common/utils/utils.module';
 import { UtilsService } from 'src/common/utils/utils.service';
+import { UserModule } from './user/user.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,6 +27,7 @@ import { UtilsService } from 'src/common/utils/utils.service';
       ],
     }),
     UtilsModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [

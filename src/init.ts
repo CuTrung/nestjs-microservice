@@ -2,6 +2,9 @@ import { INestApplication, VersioningType } from '@nestjs/common';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { ValidationPipe } from './common/pipes/validation.pipe';
+import { AuthGuard } from './common/guards/auth.guard';
 
 export const initApp = async (
   app: INestApplication,
@@ -17,5 +20,8 @@ export const initApp = async (
   app.enableCors({
     origin: white_list,
   });
+  app.useGlobalGuards(new AuthGuard());
+  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new HttpExceptionFilter());
   return app;
 };

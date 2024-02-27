@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Cookies } from 'src/common/decorator/cookies.decorator';
+import { Cookies } from 'src/common/decorators/cookies.decorator';
 
 @Controller()
 export class AppController {

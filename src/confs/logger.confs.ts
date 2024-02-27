@@ -4,6 +4,7 @@ import { createLogger } from 'winston';
 import { WinstonModule } from 'nest-winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import { ConfigService } from '@nestjs/config';
+import { ConsoleType, LogLevel } from 'src/consts';
 const configService = new ConfigService();
 const app_name = configService.get('app_name');
 const env = configService.get('node_env');
@@ -15,10 +16,6 @@ const {
   format: { nestLike },
 } = nestWinstonModuleUtilities;
 
-enum ConsoleType {
-  CONSOLE = 'console',
-  FILE = 'file',
-}
 const _getCombine = (type_combine = ConsoleType.CONSOLE) => {
   const messageFormatter = {
     [ConsoleType.CONSOLE]: nestLike(app_name, {
@@ -38,11 +35,6 @@ const _getCombine = (type_combine = ConsoleType.CONSOLE) => {
   );
 };
 
-enum LogLevel {
-  INFO = 'info',
-  ERROR = 'error',
-  WARN = 'warn',
-}
 const _createDailyRotateFile = (
   type_log = LogLevel.INFO,
   options: DailyRotateFile.DailyRotateFileTransportOptions = {
