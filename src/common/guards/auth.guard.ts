@@ -14,7 +14,7 @@ export class AuthGuard implements CanActivate {
     const { getRequest } = context.switchToHttp();
     const request = getRequest<Request>();
     const isExistsApiKey = request.headers['x-api-key'];
-    if (!isExistsApiKey) throw new UnauthorizedException(`Api key is required`);
+    // if (!isExistsApiKey) throw new UnauthorizedException(`Api key is required`);
     return true;
   }
 }

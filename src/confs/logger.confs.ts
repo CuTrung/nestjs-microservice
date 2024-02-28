@@ -4,7 +4,7 @@ import { createLogger } from 'winston';
 import { WinstonModule } from 'nest-winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import { ConfigService } from '@nestjs/config';
-import { ConsoleType, LogLevel } from 'src/consts';
+import { ConsoleType, Environments, LogLevel } from 'src/consts';
 const configService = new ConfigService();
 const app_name = configService.get('app_name');
 const env = configService.get('node_env');
@@ -23,8 +23,10 @@ const _getCombine = (type_combine = ConsoleType.CONSOLE) => {
       prettyPrint: true,
     }),
     [ConsoleType.FILE]: printf(
-      ({ level, message, timestamp, context, requestId, metadata }) =>
-        `[${env}] - ${timestamp} - ${level} - ${context} - ${requestId} - ${message}`
+      ({ message, timestamp, context, requestId, payload, time }) =>
+        `${timestamp} - ${requestId} - ${context} - ${JSON.stringify(
+          payload
+        )} - ${message} - ${time}`
     ),
   };
   return combine(
@@ -40,7 +42,7 @@ const _createDailyRotateFile = (
   options: DailyRotateFile.DailyRotateFileTransportOptions = {
     level: type_log,
     dirname: 'src/logs',
-    filename: `${app_name}_%DATE%.${type_log}.log`,
+    filename: `${app_name}_${env}_%DATE%.${type_log}.log`,
     datePattern: 'YYYY_MM_DD',
     // zippedArchive: true,
     maxSize: configService.get('log_max_size'),
@@ -58,6 +60,10 @@ export const LoggerCustom = WinstonModule.createLogger({
       _createDailyRotateFile(LogLevel.INFO),
       _createDailyRotateFile(LogLevel.ERROR),
       _createDailyRotateFile(LogLevel.WARN),
-    ],
+    ].concat(
+      env === Environments.DEVELOPMENT
+        ? _createDailyRotateFile(LogLevel.DEBUG)
+        : []
+    ),
   }),
 });

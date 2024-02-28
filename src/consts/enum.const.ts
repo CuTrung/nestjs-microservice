@@ -2,6 +2,7 @@ export enum LogLevel {
   INFO = 'info',
   ERROR = 'error',
   WARN = 'warn',
+  DEBUG = 'debug',
 }
 
 export enum ConsoleType {
@@ -14,4 +15,9 @@ export enum Environments {
   TESTING = 'testing',
   STAGING = 'staging',
   PRODUCTION = 'production',
+}
+
+export enum HttpHeaders {
+  VERSION = 'x-version',
+  REQUEST_ID = 'x-request-id',
 }
