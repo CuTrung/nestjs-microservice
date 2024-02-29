@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { RmqController } from './rmq.controller';
 import { RmqService } from './rmq.service';
@@ -13,6 +13,7 @@ import { RmqService } from './rmq.service';
       ],
       uri: 'amqp://localhost:5672',
       connectionInitOptions: { wait: false },
+      enableControllerDiscovery: true,
       // channels: {
       //   'channel-1': {
       //     prefetchCount: 15,

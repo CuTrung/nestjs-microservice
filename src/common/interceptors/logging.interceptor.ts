@@ -7,39 +7,68 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { Request, Response } from 'express';
+import { isRabbitContext } from '@golevelup/nestjs-rabbitmq';
 import { ApiService } from '../utils/api/api.service';
+import { Request, Response } from 'express';
 import { HttpHeaders } from 'src/consts';
 
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   private apiService: ApiService;
+  private context: ExecutionContext;
+  private next: CallHandler;
+
   constructor() {
-    if (!this.apiService) {
-      this.apiService = new ApiService();
-    }
+    if (!this.apiService) this.apiService = new ApiService();
   }
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    const { getRequest } = context.switchToHttp();
-    const req = getRequest<Request>();
-    const res = getRequest<Response>();
+
+  logging({ message, requestId, payload }) {
     const now = Date.now();
-    const requestId = req.headers[HttpHeaders.REQUEST_ID];
-    const path = req.path;
     Logger.log({
-      message: `Before ${path}`,
-      payload: JSON.stringify(this.apiService.getPayload(req)),
+      message: `Before ${message}`,
+      payload: JSON.stringify(payload),
       requestId,
     });
-    return next.handle().pipe(
+    return this.next.handle().pipe(
       tap((value) => {
         return Logger.log({
-          message: `After ${path}`,
+          message: `After ${message}`,
           requestId,
           payload: JSON.stringify(value),
           time: `${Date.now() - now}ms`,
         });
       })
     );
+  }
+  handleRmq() {
+    const { getClient, getData } = this.context.switchToWs();
+    const payload = getClient();
+    const {
+      fields: { exchange, routingKey },
+    } = getData();
+    return this.logging({
+      message: `"[${exchange}]: ${routingKey}"`,
+      requestId: payload.headers[HttpHeaders.REQUEST_ID],
+      payload,
+    });
+  }
+
+  handleApi() {
+    const { getRequest } = this.context.switchToHttp();
+    const req = getRequest<Request>();
+    const res = getRequest<Response>();
+    return this.logging({
+      message: `[${req.path}]`,
+      requestId: req.headers[HttpHeaders.REQUEST_ID],
+      payload: this.apiService.getPayload(req),
+    });
+  }
+
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+    this.context = context;
+    this.next = next;
+    const isRmq = isRabbitContext(context);
+    if (isRmq) return this.handleRmq();
+    return this.handleApi();
   }
 }

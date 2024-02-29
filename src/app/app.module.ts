@@ -1,10 +1,8 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { getEnvs, validationSchema } from 'src/confs/env.confs';
-import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
-import { APP_GUARD } from '@nestjs/core';
 import { UtilsModule } from 'src/common/utils/utils.module';
 import { UtilsService } from 'src/common/utils/utils.service';
 import { UserModule } from './user/user.module';
@@ -18,28 +16,12 @@ import { RmqModule } from '@nestjs-microservice/rmq';
       load: [getEnvs],
       validationSchema,
     }),
-    ThrottlerModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => [
-        {
-          ttl: config.get('throttle_ttl'),
-          limit: config.get('throttle_limit'),
-        },
-      ],
-    }),
     UtilsModule,
     UserModule,
     RmqModule,
   ],
   controllers: [AppController],
-  providers: [
-    {
-      provide: APP_GUARD,
-      useClass: ThrottlerGuard,
-    },
-    AppService,
-    UtilsService,
-  ],
+  providers: [AppService, UtilsService],
   exports: [UtilsModule],
 })
 export class AppModule {}

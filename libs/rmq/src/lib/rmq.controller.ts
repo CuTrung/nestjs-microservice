@@ -1,46 +1,51 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Headers, Param } from '@nestjs/common';
 import { Nack, RabbitRPC, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { RmqService } from './rmq.service';
 
 @Controller('rmq')
 export class RmqController {
-  constructor(private readonly amqpConnection: AmqpConnection) {}
-
-  @RabbitRPC({
-    exchange: 'exchange1',
-    routingKey: 'subscribe-route',
-    queue: 'subscribe-queue',
-    // queueOptions: {
-    //   channel: 'channel-2',
-    // },
-  })
-  public async rpcHandler(msg: {}) {
-    return {
-      // if (someCondition) {
-      //   return 42;
-      // } else if (requeueCondition) {
-      //   return new Nack(true);
-      // } else {
-      //   // Will not be requeued
-      //   return new Nack();
-      // }
-    };
-  }
+  constructor(private rmqService: RmqService) {}
+  // @RabbitRPC({
+  //   exchange: 'exchange1',
+  //   routingKey: 'subscribe-route',
+  //   queue: 'subscribe-queue',
+  //   // queueOptions: {
+  //   //   channel: 'channel-2',
+  //   // },
+  // })
+  // public async rpcHandler(msg: {}) {
+  //   return {
+  //     // if (someCondition) {
+  //     //   return 42;
+  //     // } else if (requeueCondition) {
+  //     //   return new Nack(true);
+  //     // } else {
+  //     //   // Will not be requeued
+  //     //   return new Nack();
+  //     // }
+  //   };
+  // }
 
   @RabbitSubscribe({
     exchange: 'exchange1',
-    routingKey: 'subscribe-route-2',
-    queue: 'subscribe-queue-2',
+    routingKey: 'subscribe-route',
+    // queue: 'subscribe-queue',
   })
-  public async pubSubHandler(msg: {}) {
-    console.log(`Received pub/sub message: ${JSON.stringify(msg)}`);
+  async receive({ headers = {}, ...msg }) {
+    this.rmqService.receive(msg);
   }
 
-  async sendMessage<T = any>(message: T) {
-    return await this.amqpConnection.publish<T>(
+  @Get(':id')
+  async sendMessage(
+    @Param('id') id: number,
+    @Headers() headers: Record<string, string>
+  ) {
+    const isSuccess = await this.rmqService.send(
       'exchange1',
       'subscribe-route',
-      message
+      { id, headers }
     );
+
+    return { status: isSuccess };
   }
 }
