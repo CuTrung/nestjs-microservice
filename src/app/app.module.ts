@@ -8,6 +8,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { UtilsModule } from 'src/common/utils/utils.module';
 import { UtilsService } from 'src/common/utils/utils.service';
 import { UserModule } from './user/user.module';
+import { RmqModule } from '@nestjs-microservice/rmq';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -28,6 +29,7 @@ import { UserModule } from './user/user.module';
     }),
     UtilsModule,
     UserModule,
+    RmqModule,
   ],
   controllers: [AppController],
   providers: [
