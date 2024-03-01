@@ -6,8 +6,9 @@
     "start": "nx serve --skipNxCache",
     "build": "nx build",
     "test": "nx test",
+    "e2e": "nx e2e e2e",
     "format": "nx format:write",
-    "init-husky": "husky && type husky-prepare\\pre-commit > .husky/pre-commit && type husky-prepare\\commit-msg > .husky/commit-msg",
+    "init-husky": "husky && copy husky-prepare\\pre-commit .husky\\pre-commit && copy husky-prepare\\commit-msg .husky\\commit-msg",
     "postinstall": "(if exist .husky rmdir /s /q .husky) && npm run init-husky"
   },
   "private": true,
