@@ -8,6 +8,7 @@
     "test": "nx test",
     "e2e": "nx e2e e2e",
     "format": "nx format:write",
+    "i-prod": "npm i --production --ignore-scripts",
     "init-husky": "husky && copy husky-prepare\\pre-commit .husky\\pre-commit && copy husky-prepare\\commit-msg .husky\\commit-msg",
     "postinstall": "(if exist .husky rmdir /s /q .husky) && npm run init-husky"
   },
