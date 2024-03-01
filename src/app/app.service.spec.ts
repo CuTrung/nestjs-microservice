@@ -1,15 +1,20 @@
 import { Test } from '@nestjs/testing';
 import { AppService } from './app.service';
-import { UtilsService } from 'src/common/utils/utils.service';
-import { UtilsModule } from 'src/common/utils/utils.module';
+import { RmqModule, RmqService } from '@nestjs-microservice/rmq';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 
 describe('AppService', () => {
   let service: AppService;
-
   beforeAll(async () => {
     const app = await Test.createTestingModule({
-      imports: [UtilsModule],
-      providers: [AppService, UtilsService],
+      providers: [
+        AppService,
+        RmqService,
+        {
+          provide: AmqpConnection,
+          useFactory: () => AmqpConnection,
+        },
+      ],
     }).compile();
 
     service = app.get<AppService>(AppService);

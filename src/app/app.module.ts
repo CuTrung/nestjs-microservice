@@ -1,12 +1,12 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer, Global } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getEnvs, validationSchema } from 'src/confs/env.confs';
 import { UtilsModule } from 'src/common/utils/utils.module';
-import { UtilsService } from 'src/common/utils/utils.service';
 import { UserModule } from './user/user.module';
-import { RmqModule } from '@nestjs-microservice/rmq';
+import { RmqModule, RmqService } from '@nestjs-microservice/rmq';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -21,7 +21,6 @@ import { RmqModule } from '@nestjs-microservice/rmq';
     RmqModule,
   ],
   controllers: [AppController],
-  providers: [AppService, UtilsService],
-  exports: [UtilsModule],
+  providers: [AppService],
 })
 export class AppModule {}

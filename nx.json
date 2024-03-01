@@ -38,5 +38,10 @@
         "targetName": "test"
       }
     }
-  ]
+  ],
+  "generators": {
+    "@nx/nest:controller": {
+      "unitTestRunner": "none"
+    }
+  }
 }
