@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { isRabbitContext } from '@golevelup/nestjs-rabbitmq';
 import { ApiService } from '../utils/api/api.service';
 import { Request, Response } from 'express';
 import { HttpHeaders } from 'src/consts';
@@ -67,8 +66,6 @@ export class LoggingInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     this.context = context;
     this.next = next;
-    const isRmq = isRabbitContext(context);
-    if (isRmq) return this.handleRmq();
     return this.handleApi();
   }
 }

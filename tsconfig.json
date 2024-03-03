@@ -14,7 +14,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@nestjs-microservice/rmq": ["libs/rmq/src/index.ts"]
+      "@nestjs-microservice/rmq": ["libs/rmq/src/index.ts"],
+      "@src/*": ["src/*"]
     },
     "esModuleInterop": true
   },

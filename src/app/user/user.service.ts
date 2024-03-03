@@ -1,11 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { RmqService } from '@nestjs-microservice/rmq';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(private rmqService: RmqService) {}
+  create({ context, headers, ...createUserDto }: CreateUserDto) {
+    this.rmqService.logging({
+      headers: { ...headers, pattern: context.getPattern() },
+      ...createUserDto,
+    });
+    this.rmqService.delAck(context);
+    return { hello: 'trung' };
   }
 
   findAll() {

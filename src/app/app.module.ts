@@ -1,11 +1,12 @@
-import { Module, NestModule, MiddlewareConsumer, Global } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { getEnvs, validationSchema } from 'src/confs/env.confs';
 import { UtilsModule } from 'src/common/utils/utils.module';
+import { RmqModule } from '@nestjs-microservice/rmq';
 import { UserModule } from './user/user.module';
-import { RmqModule, RmqService } from '@nestjs-microservice/rmq';
+import { RmqQueue } from '@src/consts';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { RmqModule, RmqService } from '@nestjs-microservice/rmq';
     }),
     UtilsModule,
     UserModule,
-    RmqModule,
+    RmqModule.register({ queue: RmqQueue.NESTJS_MICROSERVICE_SEND }),
   ],
   controllers: [AppController],
   providers: [AppService],

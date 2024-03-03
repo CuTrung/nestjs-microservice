@@ -1,9 +1,7 @@
-import { IsString, IsInt } from 'class-validator';
+import { RmqParams } from '@nestjs-microservice/rmq';
+import { IsString } from 'class-validator';
 
-export class CreateUserDto {
+export class CreateUserDto extends RmqParams {
   @IsString()
-  name: string;
-
-  @IsInt()
-  age: number;
+  age: string;
 }
