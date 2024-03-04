@@ -1,16 +1,19 @@
-import { utilities as nestWinstonModuleUtilities } from 'nest-winston';
 import * as winston from 'winston';
-import { createLogger } from 'winston';
-import { WinstonModule } from 'nest-winston';
+import {
+  WinstonModule,
+  utilities as nestWinstonModuleUtilities,
+} from 'nest-winston';
 import DailyRotateFile from 'winston-daily-rotate-file';
 import { ConfigService } from '@nestjs/config';
 import { ConsoleType, Environments, LogLevel } from 'src/consts';
 const configService = new ConfigService();
 const app_name = configService.get('app_name');
+console.log(`>>> ~ app_name:`, app_name);
 const env = configService.get('node_env');
 const {
   format: { combine, timestamp, printf },
   transports: { Console },
+  createLogger,
 } = winston;
 const {
   format: { nestLike },

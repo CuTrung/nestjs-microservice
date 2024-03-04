@@ -10,6 +10,7 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { DefaultParamsMiddleware } from './common/middlewares/default-params.middleware';
 import { RmqService } from '@nestjs-microservice/rmq';
 import { MicroserviceOptions } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
 
 const _initMicroservices = async (app: INestApplication) => {
   const microservices = [
@@ -27,10 +28,10 @@ const _initMicroservices = async (app: INestApplication) => {
   return app;
 };
 
-export const initApp = async (
-  app: INestApplication,
-  { white_list, server_prefix, version_latest }
-) => {
+export const initApp = async (app: INestApplication) => {
+  const { white_list, server_prefix, version_latest } = app
+    .get(ConfigService)
+    .get('env');
   app.setGlobalPrefix(server_prefix);
   app.use(DefaultParamsMiddleware);
   app.enableVersioning({

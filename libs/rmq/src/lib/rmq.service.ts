@@ -11,7 +11,7 @@ export class RmqService {
     return {
       transport: Transport.RMQ,
       options: {
-        urls: [String(this.configService.get('rmq_url'))],
+        urls: [String(this.configService.get('RMQ_URL'))],
         queueOptions: {
           durable: true,
         },

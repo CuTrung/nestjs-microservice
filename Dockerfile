@@ -1,6 +1,14 @@
-# build fe
-FROM node:20-alpine 
-WORKDIR /nestjs-microservice
+FROM node:21-alpine AS build
+
+WORKDIR /usr/nestjs-microservice
+
+COPY package*.json .
+
+RUN npm run i-prod
+
 COPY . .
-RUN npm run i-prod 
-CMD [ "npm", "start" ]
+
+EXPOSE 1111
+
+CMD ["npm", "start"]
+
