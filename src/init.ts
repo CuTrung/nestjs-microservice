@@ -18,6 +18,7 @@ const _initMicroservices = async (app: INestApplication) => {
       queue: RmqQueue.NESTJS_MICROSERVICE_RECEIVE,
       noAck: false,
       persistent: true,
+      prefetchCount: 30, // Số message tối đa xử lí cùng một lúc
     }),
   ];
   for (const microservice of microservices) {

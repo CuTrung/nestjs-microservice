@@ -1,7 +1,6 @@
 import { Controller, Get, Headers, Inject, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Cookies } from 'src/common/decorators/cookies.decorator';
-import { MessagePattern } from '@nestjs/microservices';
 
 @Controller()
 export class AppController {
@@ -9,7 +8,6 @@ export class AppController {
 
   @Get()
   getData() {
-    console.log('>>> go');
     return this.appService.getData();
   }
 

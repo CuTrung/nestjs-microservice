@@ -8,7 +8,6 @@ import { ConfigService } from '@nestjs/config';
 import { ConsoleType, Environments, LogLevel } from 'src/consts';
 const configService = new ConfigService();
 const app_name = configService.get('app_name');
-console.log(`>>> ~ app_name:`, app_name);
 const env = configService.get('node_env');
 const {
   format: { combine, timestamp, printf },
